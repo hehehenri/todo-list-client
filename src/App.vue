@@ -31,73 +31,14 @@
 </template>1
 
 <script>
-import TodoItem from './components/TodoItem.vue';
-import axios from 'axios';
-import { PaperAirplaneIcon } from '@heroicons/vue/solid'
+import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: "App",
-
+  name: 'App',
   components: {
-    TodoItem,
-    PaperAirplaneIcon
-  },
-
-  data: function () {
-    return {
-      todos: [],
-      apiUrl: process.env.VUE_APP_API_URL,
-      newTodoTitle: '',
-    }
-  },
-
-  created() {
-    this.getTodos();    
-  },
-
-  methods: {
-    updatedCheck(todo) {
-      axios.put(this.apiUrl + todo.id, {
-        'completed_at': todo.completed_at
-      });
-    },
-
-    async getTodos() {
-      const response = await fetch(this.apiUrl);
-      this.todos = await response.json();
-    },
-
-    createTodo() {
-      if (! this.newTodoTitle) {
-        return;
-      }
-
-      const todo = {
-        'title': this.newTodoTitle,
-        'completed_at': null
-      };
-
-      this.todos.push(todo);
-
-      axios.post(this.apiUrl, todo);
-
-      this.newTodoTitle = '';
-
-      this.scrollToBottom();
-    },
-
-    scrollToBottom() {
-      const todosList = document.getElementById('todos-list');
-
-      this.$nextTick(() => {
-        todosList.scrollTo({
-          top: todosList.scrollHeight,
-          behavior: 'smooth'
-        })
-      })
-    }
+    HelloWorld
   }
-};
+}
 </script>
 
 <style>
