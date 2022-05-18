@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
     .todo-title {
-        @apply font-medium text-neutral-200 select-none py-4
+        @apply font-medium text-neutral-200 select-none py-4 cursor-pointer
     };
 
     .todo-title-checked {
@@ -58,6 +58,6 @@ export default {
     };
 
     .todo-input {
-        @apply focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-800 rounded
+        @apply focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-800 rounded cursor-pointer
     };
 </style>

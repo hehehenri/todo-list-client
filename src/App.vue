@@ -5,7 +5,6 @@
       <div class="input-section">
         <input type="text"
           placeholder="Water the plants" 
-          class="my-4"
           v-model="newTodoTitle"
           @keydown.enter="createTodo"
         >
@@ -105,7 +104,7 @@ export default {
   @import '../public/dist/style.css';
 
   input[type=text] {
-    @apply text-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md bg-neutral-700 text-white px-2 py-0.5
+    @apply my-4 font-mediumels shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md bg-neutral-700 text-white px-2 py-1
   };
 
   body {
@@ -117,7 +116,7 @@ export default {
   };
 
   .todos-section {
-    @apply bg-neutral-800 rounded-3xl w-5/6 shadow-2xl h-1/2 py-12 flex flex-col
+    @apply bg-neutral-800 rounded-3xl w-5/6 shadow-2xl h-1/2 py-12 flex flex-col sm:w-2/3 md:w-1/2 xl:w-1/3 2xl:w-1/4 
   };
 
   .section-title {
@@ -129,6 +128,6 @@ export default {
   };
 
   .send-button {
-    @apply h-6 w-6 text-orange-500 rotate-90 block cursor-pointer sm:hidden
+    @apply h-6 w-6 text-orange-500 rotate-90 cursor-pointer
   };
 </style>
