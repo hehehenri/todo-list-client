@@ -24,6 +24,7 @@
         <todo-item
           :todo="todo"
           @updated-check="updatedCheck"
+          @deleteTodo="deleteTodo"
         />
       </div>
     </div>
@@ -31,21 +32,84 @@
 </template>1
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TodoItem from './components/TodoItem.vue';
+import axios from 'axios';
+import { PaperAirplaneIcon } from '@heroicons/vue/solid';
 
 export default {
   name: 'App',
+
   components: {
-    HelloWorld
+    TodoItem,
+    PaperAirplaneIcon
+  },
+
+  data: function () {
+    return {
+      todos: [],
+      apiUrl: process.env.VUE_APP_API_URL,
+      newTodoTitle: '',
+    }
+  },
+  created() {
+    this.getTodos();    
+  },
+
+  methods: {
+    updatedCheck(todo) {
+      axios.put(this.apiUrl + todo.id, {
+        'completed_at': todo.completed_at
+      });
+    },
+    async updateTodoTitle(todo) {
+      axios.put(this.apiUrl + todo.id, {
+        'title': todo.title
+      });
+    },
+
+    async getTodos() {
+      const response = await fetch(this.apiUrl);
+      this.todos = await response.json();
+    },
+
+    createTodo() {
+      if (! this.newTodoTitle) {
+        return;
+      }
+      const todo = {
+        'title': this.newTodoTitle,
+        'completed_at': null
+      };
+      this.todos.push(todo);
+      axios.post(this.apiUrl, todo);
+      this.newTodoTitle = '';
+      this.scrollToBottom();
+    },
+
+    async deleteTodo(todoId) {      
+      this.todos = this.todos.filter((todo) => todo.id != todoId);
+      
+      axios.delete(this.apiUrl + todoId);
+    },
+
+    scrollToBottom() {
+      const todosList = document.getElementById('todos-list');
+      this.$nextTick(() => {
+        todosList.scrollTo({
+          top: todosList.scrollHeight,
+          behavior: 'smooth'
+        });
+      });
+    }
   }
-}
+};
 </script>
 
 <style>
   @import '../public/dist/style.css';
 
   input[type=text] {
-    @apply my-4 font-mediumels shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md bg-neutral-700 text-white px-2 py-1
+    @apply my-4 font-medium shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md bg-neutral-700 text-white px-2 py-1
   };
 
   body {

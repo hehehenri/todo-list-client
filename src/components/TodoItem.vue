@@ -1,33 +1,62 @@
 <template>
-    <div class="flex flex-row items-center gap-x-4">
-        <label
-            :for="`todo-${todo.id}`" 
-            class="todo-title"
-            :class="{ 'todo-title-checked': isCompleted }"
-        >
+    <div class="flex flex-row items-center justify-between w-full text-neutral-300">
+        <div class="flex flex-row-reverse items-center gap-x-4">
+            <label
+                :for="`todo-${todo.id}`" 
+                class="todo-title"
+                :class="{ 'todo-title-checked': isCompleted }"
+            >
+                {{ todo.title }}
+            </label>
             <input
                 :id="`todo-${todo.id}`"
                 :name="`todo-${todo.id}`"
                 type="checkbox"
                 class="todo-input"
                 v-model="isCompleted"
+            />         
+        </div>
+        <div class="relative">
+            <DotsHorizontalIcon
+                class="w-6 h-6 cursor-pointer"
+                @click="showDropdown = !showDropdown"
             />
-            {{ todo.title }}
-        </label>
+            <div v-show="showDropdown" class="absolute right-0 rounded-lg shadow-lg flex flex-col py-3 bg-neutral-800 z-10 border border-neutral-700">
+                <div class="flex flex-row items-center gap-4 py-0.5 px-4 hover:bg-neutral-900 transition cursor-pointer">
+                    <PencilIcon class="text-white w-4 h-4" />
+                    <span>Edit</span>
+                </div>
+
+                <div class="flex flex-row items-center gap-4 py-0.5 px-4 hover:bg-neutral-900 transition cursor-pointer"
+                    @click="destroy"
+                >
+                    <TrashIcon class="text-white w-4 h-4" />
+                    <span>Delete</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import moment from 'moment';
+import { DotsHorizontalIcon, PencilIcon, TrashIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'TodoItem',
+
+    components: { 
+        DotsHorizontalIcon,
+        PencilIcon,
+        TrashIcon,
+    },
 
     props: ['todo'],
 
     data: function () {
         return {
-            isCompleted: false
+            isCompleted: false,
+            showDropdown: false,
         }
     },
 
@@ -43,7 +72,13 @@ export default {
         this.$emit('updatedCheck', {
             ...this.todo,
             completed_at: isCompleted,
-        })
+        });
+    },
+
+    methods: {
+        destroy() {
+            this.$emit('deleteTodo', this.todo.id);
+        }
     }
 }
 </script>
@@ -54,7 +89,7 @@ export default {
     };
 
     .todo-title-checked {
-        @apply text-neutral-300 line-through
+        @apply line-through
     };
 
     .todo-input {
